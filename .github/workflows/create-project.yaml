@@ -26,12 +26,6 @@ jobs:
       - name: Build
         run: GOOS=linux GOARCH=amd64 go build -v -o ./out/create-project/main ./cmd/projects/create/main.go
 
-  infra:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
