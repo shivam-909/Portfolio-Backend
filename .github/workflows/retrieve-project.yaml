@@ -37,19 +37,11 @@ jobs:
           role-duration-seconds: 900
           aws-region: eu-west-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.0.11
+      # Zip the binary
+      - name: Zip binary
+        run: zip -j create-project.zip ./out/create-project/main
 
-      - name: Terraform Init
-        working-directory: infra/retrieve_project
-        run: terraform init
-
-      - name: Terraform Plan
-        working-directory: infra/retrieve_project
-        run: terraform plan -out=plan.out
-
-      - name: Terraform Apply
-        working-directory: infra/retrieve_project
-        run: terraform apply plan.out
+      # Upload to lambda
+      - name: AWS Deploy
+        run: |
+          aws lambda update-function-code --function-name create-project --zip-file fileb://create-project.zip

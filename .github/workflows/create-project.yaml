@@ -44,4 +44,4 @@ jobs:
       # Upload to lambda
       - name: AWS Deploy
         run: |
-          aws lambda update-function-code --function-name create-function --zip-file fileb://create-project.zip
+          aws lambda update-function-code --function-name create-project --zip-file fileb://create-project.zip
