@@ -1,0 +1,46 @@
+# Create a workflow that is triggered when a change is made to ./cmd/projects/create/**
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+name: Sync Projects - Build and Deploy
+on:
+  push:
+    paths:
+      - ".github/workflows/sync-projects.yaml"
+      - "cmd/projects/sync/main.go"
+  workflow_dispatch:
+    inputs:
+      REASON:
+        description: "Reason for running this workflow"
+        required: true
+        default: "Manual trigger"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Build
+        run: GOOS=linux GOARCH=amd64 go build "-X main.GITHUB_TOKEN=${{ secrets.GIT_API_TOKEN }}" -v -o ./out/sync-projects/main ./cmd/projects/sync/main.go
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-duration-seconds: 900
+          aws-region: eu-west-1
+
+      # Zip the binary
+      - name: Zip binary
+        run: zip -j sync-projects.zip ./out/sync-projects/main
+
+      # Upload to lambda
+      - name: AWS Deploy
+        run: |
+          aws lambda update-function-code --function-name sync-projects --zip-file fileb://sync-projects.zip
