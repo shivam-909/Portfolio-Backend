@@ -6,6 +6,12 @@ on:
     paths:
       - ".github/workflows/create-project.yaml"
       - "cmd/projects/create/main.go"
+  workflow_dispatch:
+    inputs:
+      REASON:
+        description: "Reason for running this workflow"
+        required: true
+        default: "Manual trigger"
 jobs:
   build:
     runs-on: ubuntu-latest
