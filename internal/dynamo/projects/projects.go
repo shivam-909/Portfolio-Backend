@@ -1,6 +1,8 @@
 package projects
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -36,7 +38,7 @@ func RetrieveProject(db *dynamodb.DynamoDB, id int32) (projects.Project, error) 
 	input := &dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
-				N: aws.String(string(id)),
+				N: aws.String(fmt.Sprintf("%d", id)),
 			},
 		},
 		TableName: aws.String(projectTableName),
