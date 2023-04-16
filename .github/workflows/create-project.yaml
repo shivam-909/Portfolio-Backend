@@ -1,4 +1,7 @@
 # Create a workflow that is triggered when a change is made to ./cmd/projects/create/**
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
 
 name: Create Project - Build and Deploy
 on:
