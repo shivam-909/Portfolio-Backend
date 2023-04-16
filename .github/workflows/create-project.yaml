@@ -1,0 +1,41 @@
+# Create a workflow that is triggered when a change is made to ./cmd/projects/create/**
+
+name: Create Project - Build and Deploy
+on:
+  push:
+    paths:
+      - "cmd/projects/create/main.go"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Build
+        run: go build -v -o ./create-project ./cmd/projects/create/main.go
+
+  infra:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.11
+
+      - name: Terraform Init
+        working-directory: ./infra/create-project
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=plan.out
+
+      - name: Terraform Apply
+        run: terraform apply plan.out

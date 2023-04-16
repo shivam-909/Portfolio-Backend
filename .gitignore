@@ -1,4 +1,7 @@
 main
-main.zip
+**/*.zip
 .DS_Store
-
+**/.terraform/*
+**/.terraform.lock.hcl
+out/**/*
+**/*.out
