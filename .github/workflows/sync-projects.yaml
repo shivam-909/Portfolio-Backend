@@ -27,7 +27,7 @@ jobs:
           go-version: 1.19
 
       - name: Build
-        run: GOOS=linux GOARCH=amd64 go build "-X main.GITHUB_TOKEN=${{ secrets.GIT_API_TOKEN }}" -v -o ./out/sync-projects/main ./cmd/projects/sync/main.go
+        run: GOOS=linux GOARCH=amd64 go build -ldflags "-X main.GITHUB_TOKEN=${{ secrets.GIT_API_TOKEN }}" -v -o ./out/sync-projects/main ./cmd/projects/sync/main.go
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
