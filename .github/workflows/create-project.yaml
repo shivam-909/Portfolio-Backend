@@ -17,7 +17,7 @@ jobs:
           go-version: 1.19
 
       - name: Build
-        run: go build -v -o ./create-project ./cmd/projects/create/main.go
+        run: GOOS=linux GOARCH=amd64 go build -v -o ./out/create-project/main ./cmd/projects/create/main.go
 
   infra:
     runs-on: ubuntu-latest
