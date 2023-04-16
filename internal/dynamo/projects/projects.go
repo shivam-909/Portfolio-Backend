@@ -35,21 +35,30 @@ func RetrieveProject(db *dynamodb.DynamoDB, id int32) (projects.Project, error) 
 
 	var project projects.Project
 
-	input := &dynamodb.GetItemInput{
-		Key: map[string]*dynamodb.AttributeValue{
+	var queryInput = &dynamodb.QueryInput{
+		TableName: aws.String(projectTableName),
+		KeyConditions: map[string]*dynamodb.Condition{
 			"id": {
-				N: aws.String(fmt.Sprintf("%d", id)),
+				ComparisonOperator: aws.String("EQ"),
+				AttributeValueList: []*dynamodb.AttributeValue{
+					{
+						N: aws.String(fmt.Sprintf("%d", id)),
+					},
+				},
 			},
 		},
-		TableName: aws.String(projectTableName),
 	}
 
-	result, err := db.GetItem(input)
+	var result, err = db.Query(queryInput)
 	if err != nil {
 		return project, err
 	}
 
-	err = dynamodbattribute.UnmarshalMap(result.Item, &project)
+	if len(result.Items) == 0 {
+		return project, fmt.Errorf("no project found with id %d", id)
+	}
+
+	err = dynamodbattribute.UnmarshalMap(result.Items[0], &project)
 	if err != nil {
 		return project, err
 	}

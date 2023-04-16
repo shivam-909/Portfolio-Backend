@@ -9,7 +9,6 @@ on:
     paths:
       - ".github/workflows/create-project.yaml"
       - "cmd/projects/create/main.go"
-      - "infra/create_project/**"
   workflow_dispatch:
     inputs:
       REASON:
