@@ -31,7 +31,7 @@ jobs:
           terraform_version: 1.0.11
 
       - name: Terraform Init
-        working-directory: ./infra/create-project
+        working-directory: infra/create-project
         run: terraform init
 
       - name: Terraform Plan
