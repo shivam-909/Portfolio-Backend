@@ -1,4 +1,7 @@
 # Create a workflow that is triggered when a change is made to ./cmd/projects/create/**
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
 
 name: Retrieve Project - Build and Deploy
 on:
@@ -29,9 +32,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-duration-seconds: 900
+          aws-region: eu-west-1
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
