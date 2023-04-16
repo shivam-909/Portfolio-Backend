@@ -5,4 +5,9 @@
 - Accepts email requests.
 - Organises payment flows for donations.
 
-Built entirely using AWS Lambda functions.
+Built entirely using AWS Lambda functions, sitting behind an API Gateway.
+
+Todo:
+- [ ] Use terraform to create lambdas that don't already exist.
+- [ ] Setup Stripe flow.
+- [ ] Setup email flow.

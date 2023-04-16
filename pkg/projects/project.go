@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/google/go-github/v51/github"
 )
 
 type Demo struct {
@@ -12,10 +13,10 @@ type Demo struct {
 }
 
 type Project struct {
-	ID          int32    `json:"id"`
+	ID          int64    `json:"id"`
 	Title       string   `json:"title"`
 	Description string   `json:"description"`
-	Created     int32    `json:"created"`
+	Created     int64    `json:"created"`
 	LinkToRepo  string   `json:"link_to_repo"`
 	ImageURL    string   `json:"image_url"`
 	Tags        []string `json:"tags"`
@@ -38,4 +39,20 @@ func (p Project) String() string {
 		return ""
 	}
 	return string(json)
+}
+
+func FromGithubProject(ghp github.Repository) Project {
+	return Project{
+		ID:          ghp.GetID(),
+		Title:       ghp.GetName(),
+		Description: ghp.GetDescription(),
+		Created:     ghp.GetCreatedAt().Unix(),
+		LinkToRepo:  ghp.GetHTMLURL(),
+		ImageURL:    "",
+		Tags:        []string{},
+		Demo: Demo{
+			Exists:   false,
+			Metadata: map[string]string{},
+		},
+	}
 }
