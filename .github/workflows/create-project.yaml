@@ -4,6 +4,7 @@ name: Create Project - Build and Deploy
 on:
   push:
     paths:
+      - ".github/workflows/create-project.yaml"
       - "cmd/projects/create/main.go"
 jobs:
   build:
