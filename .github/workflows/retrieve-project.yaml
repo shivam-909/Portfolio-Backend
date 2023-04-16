@@ -39,9 +39,9 @@ jobs:
 
       # Zip the binary
       - name: Zip binary
-        run: zip -j create-project.zip ./out/create-project/main
+        run: zip -j retrieve-project.zip ./out/retrieve-project/main
 
       # Upload to lambda
       - name: AWS Deploy
         run: |
-          aws lambda update-function-code --function-name create-project --zip-file fileb://create-project.zip
+          aws lambda update-function-code --function-name retrieve-project --zip-file fileb://retrieve-project.zip
