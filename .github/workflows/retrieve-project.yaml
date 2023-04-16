@@ -9,6 +9,7 @@ on:
     paths:
       - ".github/workflows/retrieve-project.yaml"
       - "cmd/projects/retrieve/main.go"
+      - "infra/retrieve_project/**"
   workflow_dispatch:
     inputs:
       REASON:

@@ -39,7 +39,7 @@ resource "aws_cloudwatch_log_group" "terraform_test" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_test_lambda"
+  name = "portfolio-lambda"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
