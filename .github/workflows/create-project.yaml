@@ -42,7 +42,9 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        working-directory: infra/create_project
         run: terraform plan -out=plan.out
 
       - name: Terraform Apply
+        working-directory: infra/create_project
         run: terraform apply plan.out
