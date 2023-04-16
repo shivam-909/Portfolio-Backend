@@ -37,7 +37,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 
 	sess := dynamo.CreateDynamoSession()
 
-	githubProjects, _, err := gc.Repositories.ListByOrg(context.Background(), "shivam-909", &github.RepositoryListByOrgOptions{
+	githubProjects, _, err := gc.Repositories.List(context.Background(), "shivam-909", &github.RepositoryListOptions{
 		Type: "public",
 	})
 
