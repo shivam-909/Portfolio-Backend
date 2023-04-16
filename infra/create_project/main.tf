@@ -25,8 +25,8 @@ data "archive_file" "lambda_terraform_test" {
 
 # to Create function
 resource "aws_lambda_function" "terraform_test" {
-  function_name    = "create-function"
-  filename         = "create-function.zip"
+  function_name    = "create-project"
+  filename         = "create-project.zip"
   runtime          = "go1.x"
   handler          = "create-project"
   source_code_hash = data.archive_file.lambda_terraform_test.output_base64sha256
