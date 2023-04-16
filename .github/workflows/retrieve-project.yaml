@@ -1,0 +1,44 @@
+# Create a workflow that is triggered when a change is made to ./cmd/projects/create/**
+
+name: Retrieve Project - Build and Deploy
+on:
+  push:
+    paths:
+      - ".github/workflows/retrieve-project.yaml"
+      - "cmd/projects/retrieve/main.go"
+  workflow_dispatch:
+    inputs:
+      REASON:
+        description: "Reason for running this workflow"
+        required: true
+        default: "Manual trigger"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Build
+        run: GOOS=linux GOARCH=amd64 go build -v -o ./out/retrieve-project/main ./cmd/projects/retrieve/main.go
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.11
+
+      - name: Terraform Init
+        working-directory: infra/retrieve_project
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: infra/retrieve_project
+        run: terraform plan -out=plan.out
+
+      - name: Terraform Apply
+        working-directory: infra/retrieve_project
+        run: terraform apply plan.out
